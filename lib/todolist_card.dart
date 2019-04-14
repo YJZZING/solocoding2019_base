@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'todolist_modle.dart';
+import 'todolist_detail_page.dart';
 
 class ToDoCard extends StatefulWidget {
   final ToDo toDo;
@@ -18,7 +19,9 @@ class _ToDoCardState extends State<ToDoCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return InkWell(
+      onTap: showToDoDetailPage,
+      child : Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Container(
         height: 115.0,
@@ -30,6 +33,7 @@ class _ToDoCardState extends State<ToDoCard> {
           ],
         ),
       ),
+    ),
     );
   }
 
@@ -59,4 +63,16 @@ class _ToDoCardState extends State<ToDoCard> {
       ),
     );
   }
+
+  showToDoDetailPage() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) {
+          return ToDoDetailPage(toDo);
+        },
+      ),
+    );
+  }
 }
+
+

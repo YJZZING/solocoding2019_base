@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'todolist_modle.dart';
 import 'todolist.dart';
+import 'new_todo_form.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,10 +36,7 @@ class MyMainPage extends StatefulWidget {
 }
 
 class _MyMainPageState extends State<MyMainPage>{
-  List<ToDo> initialToDo = []
-    ..add(ToDo('일기', '오늘의 일기 쓰기'))
-    ..add(ToDo('영어', 'Easy English 듣기'))
-    ..add(ToDo('운동', '러닝머신 20분'));
+  List<ToDo> initialToDo = [];
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +44,32 @@ class _MyMainPageState extends State<MyMainPage>{
       appBar: AppBar(
         title: Text(widget.title),
         backgroundColor: Colors.cyan,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: _showNewToDoForm,
+          ),
+        ],
       ),
       body: Container(
         child: ToDoList(initialToDo),
       ),
     );
+  }
+
+  Future _showNewToDoForm() async {
+    // push a new route like you did in the last section
+    ToDo newToDo = await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return AddToDoPage();
+        },
+      ),
+    );
+    // A null check, to make sure that the user didn't abandon the form.
+    if (newToDo != null) {
+      // Add a newDog to our mock dog array.
+      initialToDo.add(newToDo);
+    }
   }
 }
