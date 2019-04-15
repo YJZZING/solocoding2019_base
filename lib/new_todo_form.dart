@@ -30,12 +30,8 @@ class _AddToDoFormPageState extends State<AddToDoPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(bottom: 8.0),
-                // Text Field is the basic input widget for Flutter.
-                // It comes built in with a ton of great UI and
-                // functionality, such as the labelText field you see below.
                 child: TextField(
                     controller: titleController,
-                    onChanged: (v) => titleController.text = v,
                     decoration: InputDecoration(
                       labelText: 'Title',
                     )),
@@ -44,7 +40,6 @@ class _AddToDoFormPageState extends State<AddToDoPage> {
                 padding: const EdgeInsets.only(bottom: 8.0),
                 child: TextField(
                     controller: descriptionController,
-                    onChanged: (v) => descriptionController.text = v,
                     decoration: InputDecoration(
                       labelText: "Description",
                     )),
