@@ -29,11 +29,11 @@ class _ToDoDetailPageState extends State<ToDoDetailPage> {
               style: TextStyle(fontSize: 20.0),
             ),
             Text(
-              'Start : ${widget.toDo.startTime.toIso8601String()}',
+              'Start : ${widget.toDo.startTime}',
               style: TextStyle(fontSize: 20.0),
             ),
             Text(
-              'End : ${widget.toDo.endTime.toIso8601String()}',
+              'End : ${widget.toDo.endTime}',
               style: TextStyle(fontSize: 20.0),
             ),
             Text(

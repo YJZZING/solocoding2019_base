@@ -42,7 +42,7 @@ class _ToDoCardState extends State<ToDoCard> {
       width: double.infinity,
       height: 115.0,
       child: Card(
-        color: widget.toDo.background,
+        color: new Color(widget.toDo.color),
         child: Padding(
           padding: const EdgeInsets.only(
             top: 8.0,
