@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'todolist_modle.dart';
+import 'database_helper.dart';
+
 class AddToDoPage extends StatefulWidget {
   @override
   _AddToDoFormPageState createState() => _AddToDoFormPageState();
@@ -10,7 +12,8 @@ class _AddToDoFormPageState extends State<AddToDoPage> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   bool isChecked = false;
-  void _changeChecked(bool value )  => setState(() => isChecked = value);
+
+  void _changeChecked(bool value) => setState(() => isChecked = value);
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +48,16 @@ class _AddToDoFormPageState extends State<AddToDoPage> {
                     )),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 8.0),
-                child: Row(
-                  children: <Widget>[
-                    Text('Alarm On'),
-                    Checkbox(value: isChecked, onChanged: _changeChecked, checkColor: Colors.cyan),
-                  ],
-                )
-              ),
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text('Alarm On'),
+                      Checkbox(
+                          value: isChecked,
+                          onChanged: _changeChecked,
+                          checkColor: Colors.cyan),
+                    ],
+                  )),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Builder(
@@ -79,9 +84,20 @@ class _AddToDoFormPageState extends State<AddToDoPage> {
     if (titleController.text.isEmpty) {
       print('ToDo need title!');
     } else {
-      var newToDo = ToDo(titleController.text, descriptionController.text);
-      newToDo.alarmOn = isChecked;
+      var newToDo = ToDo(
+          title: titleController.text,
+          description: descriptionController.text,
+          alarmTime: new DateTime.now().toIso8601String(),
+          alarmOn: (isChecked ? 1 : 0),
+          color: 0xFFFFFFFF);
+
+      addRecord(newToDo);
       Navigator.of(context).pop(newToDo);
     }
+  }
+
+  Future addRecord(ToDo newToDo) async {
+    var db = new DatabaseHelper();
+    await db.saveToDo(newToDo);
   }
 }

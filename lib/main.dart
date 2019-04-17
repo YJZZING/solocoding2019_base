@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'todolist_modle.dart';
 import 'todolist.dart';
 import 'new_todo_form.dart';
+import 'main_present.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,7 +22,7 @@ class MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),
-      home: MyMainPage(title : 'To do List'),
+      home: MyMainPage(title: 'To do List'),
     );
   }
 }
@@ -35,8 +36,14 @@ class MyMainPage extends StatefulWidget {
   _MyMainPageState createState() => _MyMainPageState();
 }
 
-class _MyMainPageState extends State<MyMainPage>{
-  List<ToDo> initialToDo = [];
+class _MyMainPageState extends State<MyMainPage> implements MyMainContract {
+  MyMainPresenter myMainPresenter;
+
+  @override
+  void initState() {
+    super.initState();
+    myMainPresenter = new MyMainPresenter(this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +52,15 @@ class _MyMainPageState extends State<MyMainPage>{
         title: Text(widget.title),
         backgroundColor: Colors.cyan,
       ),
-      body: Container(
-        child: ToDoList(initialToDo),
+      body: FutureBuilder<List<ToDo>>(
+        future: myMainPresenter.getToDoList(),
+        builder: (BuildContext context, AsyncSnapshot<List<ToDo>> snapshot) {
+          if (snapshot.hasData) {
+            return ToDoList(snapshot.data);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -67,9 +81,11 @@ class _MyMainPageState extends State<MyMainPage>{
         },
       ),
     );
+    setState(() {});
+  }
 
-    if (newToDo != null) {
-      initialToDo.add(newToDo);
-    }
+  @override
+  void screenUpdate() {
+    setState(() {});
   }
 }
