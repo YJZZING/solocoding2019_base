@@ -1,18 +1,18 @@
 import 'dart:async';
-import 'database_helper.dart';
+import 'database_box_helper.dart';
 import 'todolist_modle.dart';
 
-abstract class MyMainContract {
+abstract class MyToDoBoxContract {
   void screenUpdate();
 }
 
-class MyMainPresenter {
-  MyMainContract _view;
-  var db = new DatabaseHelper();
-  MyMainPresenter(this._view);
+class MyToDoBoxPresenter {
+  MyToDoBoxContract _view;
+  var db = new DatabaseBoxHelper();
+  MyToDoBoxPresenter(this._view);
 
   delete(ToDo todo) {
-    var db = new DatabaseHelper();
+    var db = new DatabaseBoxHelper();
     db.deleteToDo(todo);
     updateScreen();
   }

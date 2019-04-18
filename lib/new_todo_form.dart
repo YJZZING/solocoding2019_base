@@ -92,7 +92,7 @@ class _AddToDoFormPageState extends State<AddToDoPage> {
           color: 0xFFFFFFFF);
 
       addRecord(newToDo);
-      Navigator.of(context).pop(newToDo);
+      Navigator.of(context).pop();
     }
   }
 

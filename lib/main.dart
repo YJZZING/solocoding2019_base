@@ -4,6 +4,8 @@ import 'todolist_modle.dart';
 import 'todolist.dart';
 import 'new_todo_form.dart';
 import 'main_present.dart';
+import 'todo_box.dart';
+import 'database_box_helper.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,7 +24,7 @@ class MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.cyan,
       ),
-      home: MyMainPage(title: 'To do List'),
+      home: MyMainPage(title: 'ToDo List'),
     );
   }
 }
@@ -51,6 +53,12 @@ class _MyMainPageState extends State<MyMainPage> implements MyMainContract {
       appBar: AppBar(
         title: Text(widget.title),
         backgroundColor: Colors.cyan,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.inbox),
+            onPressed: _showToDoBox,
+          ),
+        ],
       ),
       body: FutureBuilder<List<ToDo>>(
         future: myMainPresenter.getToDoList(),
@@ -74,7 +82,7 @@ class _MyMainPageState extends State<MyMainPage> implements MyMainContract {
   }
 
   Future _showNewToDoForm() async {
-    ToDo newToDo = await Navigator.of(context).push(
+    await Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) {
           return AddToDoPage();
@@ -87,5 +95,22 @@ class _MyMainPageState extends State<MyMainPage> implements MyMainContract {
   @override
   void screenUpdate() {
     setState(() {});
+  }
+
+  Future _showToDoBox() async {
+    // push a new route like you did in the last section
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return ToDoBoxPage();
+        },
+      ),
+    );
+  }
+
+
+  Future addBoxRecord(ToDo newToDo) async {
+    var db = new DatabaseBoxHelper();
+    await db.saveToDo(newToDo);
   }
 }
