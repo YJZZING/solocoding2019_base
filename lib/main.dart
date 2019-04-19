@@ -108,9 +108,4 @@ class _MyMainPageState extends State<MyMainPage> implements MyMainContract {
     );
   }
 
-
-  Future addBoxRecord(ToDo newToDo) async {
-    var db = new DatabaseBoxHelper();
-    await db.saveToDo(newToDo);
-  }
 }
