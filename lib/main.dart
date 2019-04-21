@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'todolist_modle.dart';
-import 'todolist.dart';
 import 'new_todo_form.dart';
 import 'main_present.dart';
 import 'todo_box.dart';
+import 'base_present.dart';
 import 'database_box_helper.dart';
+import 'database_helper.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -38,8 +40,9 @@ class MyMainPage extends StatefulWidget {
   _MyMainPageState createState() => _MyMainPageState();
 }
 
-class _MyMainPageState extends State<MyMainPage> implements MyMainContract {
+class _MyMainPageState extends State<MyMainPage> implements BaseContract {
   MyMainPresenter myMainPresenter;
+  List<ToDo> myToDoList;
 
   @override
   void initState() {
@@ -64,7 +67,89 @@ class _MyMainPageState extends State<MyMainPage> implements MyMainContract {
         future: myMainPresenter.getToDoList(),
         builder: (BuildContext context, AsyncSnapshot<List<ToDo>> snapshot) {
           if (snapshot.hasData) {
-            return ToDoList(snapshot.data);
+            myToDoList = snapshot.data;
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: Container(
+                      height: 115.0,
+                      child: Stack(
+                        children: <Widget>[
+                          Positioned(
+                              child: Slidable(
+                                delegate: new SlidableStrechDelegate(),
+                                actionExtentRatio: 0.25,
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 115.0,
+                                  child: Card(
+                                    color: new Color(
+                                        snapshot.data[index].color),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 8.0,
+                                        bottom: 8.0,
+                                        left: 8.0,
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceAround,
+                                        children: <Widget>[
+                                          Text(snapshot.data[index].title,
+                                              style: Theme
+                                                  .of(context)
+                                                  .textTheme
+                                                  .headline),
+                                          Text(snapshot.data[index].description,
+                                              style: Theme
+                                                  .of(context)
+                                                  .textTheme
+                                                  .subhead),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                actions: <Widget>[
+                                  IconSlideAction(
+                                    caption: 'Archive',
+                                    color: Colors.blue,
+                                    icon: Icons.archive,
+                                    onTap: () =>
+                                        _doAction(snapshot.data[index], 1),
+                                  ),
+                                  IconSlideAction(
+                                    caption: 'Share',
+                                    color: Colors.indigo,
+                                    icon: Icons.share,
+                                    onTap: () =>
+                                        _doAction(snapshot.data[index], 2),
+                                  ),
+                                ],
+                                secondaryActions: <Widget>[
+                                  IconSlideAction(
+                                    caption: 'Delete',
+                                    color: Colors.red,
+                                    icon: Icons.delete,
+                                    onTap: () =>
+                                        _doAction(snapshot.data[index], 3),
+                                  ),
+                                ],
+                              ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
           } else {
             return Center(child: CircularProgressIndicator());
           }
@@ -90,6 +175,32 @@ class _MyMainPageState extends State<MyMainPage> implements MyMainContract {
       ),
     );
     setState(() {});
+  }
+
+  _doAction(ToDo toDo, int action) {
+    switch (action) {
+      case 1:
+        deleteRecord(toDo);
+        addBoxRecord(toDo);
+        setState(() {});
+        break;
+      case 2:
+        break;
+      case 3:
+        deleteRecord(toDo);
+        setState(() {});
+        break;
+    }
+  }
+
+  Future deleteRecord(ToDo toDo) async {
+      var db = new DatabaseHelper();
+      await db.deleteToDo(toDo);
+  }
+
+  Future addBoxRecord(ToDo newToDo) async {
+    var db = new DatabaseBoxHelper();
+    await db.saveToDo(newToDo);
   }
 
   @override

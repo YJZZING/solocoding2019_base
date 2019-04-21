@@ -1,15 +1,12 @@
 import 'dart:async';
 import 'database_helper.dart';
 import 'todolist_modle.dart';
+import 'base_present.dart';
 
-abstract class MyMainContract {
-  void screenUpdate();
-}
-
-class MyMainPresenter {
-  MyMainContract _view;
+class MyMainPresenter extends BasePresenter{
   var db = new DatabaseHelper();
-  MyMainPresenter(this._view);
+
+  MyMainPresenter(BaseContract view) : super(view);
 
   delete(ToDo todo) {
     var db = new DatabaseHelper();
@@ -19,10 +16,5 @@ class MyMainPresenter {
 
   Future<List<ToDo>> getToDoList() {
     return db.getToDoList();
-  }
-
-  updateScreen() {
-    _view.screenUpdate();
-
   }
 }
