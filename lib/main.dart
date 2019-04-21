@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:share/share.dart';
 import 'todolist_modle.dart';
 import 'new_todo_form.dart';
 import 'main_present.dart';
@@ -185,6 +186,7 @@ class _MyMainPageState extends State<MyMainPage> implements BaseContract {
         setState(() {});
         break;
       case 2:
+        Share.share(toDo.title + ' ' + toDo.description);
         break;
       case 3:
         deleteRecord(toDo);

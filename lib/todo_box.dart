@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:share/share.dart';
 import 'todolist_modle.dart';
 import 'todo_box_present.dart';
 import 'base_present.dart';
@@ -121,6 +122,7 @@ class _MyToDoBoxPageState extends State<ToDoBoxPage> implements BaseContract{
   _doAction(ToDo toDo, int action) {
     switch (action) {
       case 1:
+        Share.share(toDo.title + ' ' + toDo.description);
         break;
       case 2:
         deleteRecord(toDo);
